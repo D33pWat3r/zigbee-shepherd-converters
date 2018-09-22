@@ -306,17 +306,6 @@ const devices = [
         fromZigbee: [fz.xiaomi_lock_report, fz.ignore_basic_change],
         toZigbee: [],
     },
-    {
-        zigbeeModel: ['lumi.vibration.aq1'],
-        model: 'DJT11LM',
-        vendor: 'Xiaomi',
-        description: 'Aqara vibration sensor',
-        supports: 'drop, tilt and touch',
-        fromZigbee: [
-            fz.xiaomi_battery_3v, fz.DJT11LM_vibration, fz.ignore_basic_change, fz.ignore_doorlock_change,
-        ],
-        toZigbee: [tz.DJT11LM_vibration_sensitivity],
-    },
 
     // IKEA
     {
@@ -469,6 +458,15 @@ const devices = [
         model: '7299760PH',
         vendor: 'Philips',
         description: 'Hue Bloom',
+        supports: generic.light_onoff_brightness_colorxy().supports,
+        fromZigbee: generic.light_onoff_brightness_colorxy().fromZigbee,
+        toZigbee: generic.light_onoff_brightness_colorxy().toZigbee,
+    },
+	{
+        zigbeeModel: ['LLC010'],
+        model: '7199960PH',
+        vendor: 'Philips',
+        description: 'Hue Iris',
         supports: generic.light_onoff_brightness_colorxy().supports,
         fromZigbee: generic.light_onoff_brightness_colorxy().fromZigbee,
         toZigbee: generic.light_onoff_brightness_colorxy().toZigbee,
@@ -1017,25 +1015,6 @@ const devices = [
         model: '45852GE',
         vendor: 'GE',
         description: 'ZigBee plug-in smart dimmer',
-        supports: 'on/off, brightness',
-        fromZigbee: [fz.light_brightness, fz.ignore_onoff_change, fz.generic_state],
-        toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
-        configure: (ieeeAddr, shepherd, coordinator, callback) => {
-            const cfg = {direction: 0, attrId: 0, dataType: 16, minRepIntval: 0, maxRepIntval: 1000, repChange: 0};
-            const device = shepherd.find(ieeeAddr, 1);
-            const actions = [
-                (cb) => device.bind('genOnOff', coordinator, cb),
-                (cb) => device.foundation('genOnOff', 'configReport', [cfg], foundationCfg, cb),
-            ];
-
-            execute(device, actions, callback);
-        },
-    },
-    {
-        zigbeeModel: ['45857'],
-        model: '45857GE',
-        vendor: 'GE',
-        description: 'ZigBee in-wall smart dimmer',
         supports: 'on/off, brightness',
         fromZigbee: [fz.light_brightness, fz.ignore_onoff_change, fz.generic_state],
         toZigbee: [tz.onoff, tz.light_brightness, tz.ignore_transition],
